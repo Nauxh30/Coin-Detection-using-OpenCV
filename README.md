@@ -1,210 +1,81 @@
-# 🪙 Coin Detection using OpenCV
+# Coin Detection using OpenCV
 
-A simple Computer Vision project that detects and visualizes coins from an image using **OpenCV**, **Python**, and **Matplotlib**.
+This repository contains a computer vision project for detecting and counting coins in an image using the **OpenCV** library in Python. The project explores two distinct segmentation and detection methodologies: the **Watershed Algorithm** and the **SimpleBlobDetector**.
 
----
+-----
 
-## 📖 Overview
+## Getting Started
 
-This project demonstrates basic image processing techniques such as:
+These instructions will get you a copy of the project up and running on your local machine.
 
-- Reading images using OpenCV
-- Displaying images using Matplotlib
-- Detecting coins from an image
-- Understanding image preprocessing concepts
-- Handling common image loading errors
+### Prerequisites
 
-This assignment is useful for beginners learning:
-- Computer Vision
-- OpenCV
-- Image Processing in Python
-
----
-
-## 🛠️ Technologies Used
-
-- Python
-- OpenCV (`cv2`)
-- NumPy
-- Matplotlib
-- Jupyter Notebook
-
----
-
-## 📂 Project Structure
+You need **Python 3.x** installed. The core dependencies can be installed using `pip`.
 
 ```bash
-Coin-Detection-Assignment/
-│
-├── Coin-Detection-Assignment.ipynb
-├── images/
-│   └── CoinsA.png
-└── README.md
+pip install opencv-python numpy matplotlib jupyter
 ```
 
----
+### File Structure
 
-## ⚙️ Installation
+The main logic and steps are contained within the Jupyter Notebook.
 
-Install the required libraries:
-
-```bash
-pip install opencv-python matplotlib numpy
+```
+Coin-Detection-OpenCV/
+├── Coin-Detection.ipynb      # Main Jupyter Notebook with all the code
+└── CoinsA.png                # Sample input image
+└── README.md                 # This file
 ```
 
----
+-----
 
-## ▶️ How to Run
+## Methodologies
 
-1. Clone the repository:
+The project demonstrates two different approaches to coin detection, each suitable for varying image conditions.
 
-```bash
-git clone https://github.com/your-username/Coin-Detection-Assignment.git
-```
+### 1\. Watershed Algorithm
 
-2. Navigate to the project folder:
+The Watershed algorithm treats the image as a topographic map, where pixels' intensity values represent height. It is particularly effective for separating **touching or overlapping objects** (coins).
 
-```bash
-cd Coin-Detection-Assignment
-```
+**Key Steps:**
 
-3. Launch Jupyter Notebook:
+1.  **Grayscale & Thresholding:** Convert to grayscale and apply **OTSU's binarization**.
+2.  **Morphological Operations:** Use **Opening** for noise removal, and **Dilation** to identify the **sure background**.
+3.  **Distance Transform:** Apply the distance transform and thresholding to find the **sure foreground** (centers of the coins).
+4.  **Marker Generation:** Create markers identifying the sure foreground, sure background, and the **unknown region**.
+5.  **Watershed Application:** Apply the algorithm to segment the coins, with boundaries marked in a distinct color (e.g., red).
 
-```bash
-jupyter notebook
-```
+### 2\. SimpleBlobDetector
 
-4. Open:
+This method is an easier, parameter-driven approach to finding circular objects (blobs) in an image. It relies on pre-defined criteria to isolate the coins.
 
-```bash
-Coin-Detection-Assignment.ipynb
-```
+**Key Parameters Used:**
 
-5. Ensure the image exists at:
+  * `filterByArea`: Filters blobs based on size (e.g., `minArea = 500`).
+  * `filterByCircularity`: Filters for shapes close to a perfect circle (e.g., `minCircularity = 0.8`).
+  * `filterByConvexity`: Filters for convex shapes (e.g., `minConvexity = 0.8`).
+  * `filterByInertiaRatio`: Filters for how close the shape is to a circle.
 
-```bash
-./images/CoinsA.png
-```
+-----
 
-6. Run all notebook cells.
+## Usage
 
----
+To run the project, simply launch the Jupyter Notebook and execute the cells sequentially.
 
-## 📸 Sample Code
+1.  **Start Jupyter:**
+    ```
+    jupyter notebook
+    ```
+2.  Open the `Coin-Detection.ipynb` file.
+3.  Run all cells to see the results for both detection methods.
 
-```python
-import cv2
-import matplotlib.pyplot as plt
+### Expected Output
 
-# Image path
-imagePath = "./images/CoinsA.png"
+The notebook will display intermediate processing steps (threshold, distance transform) and two final output images:
 
-# Read image
-image = cv2.imread(imagePath)
+1.  An image showing the coins segmented and their boundaries highlighted by the **Watershed Algorithm**.
+2.  An image with circles drawn around the centers of the coins detected by the **SimpleBlobDetector**, along with a printout of the total **number of coins detected**.
 
-# Display image
-plt.imshow(image[:,:,::-1])
-plt.title("Original Image")
-plt.show()
-```
+-----
 
----
-
-## 🔍 Features
-
-✅ Coin image loading  
-✅ Image visualization  
-✅ Coin detection concepts  
-✅ OpenCV image processing  
-✅ Error handling for missing image paths  
-
----
-
-## ⚠️ Common Errors
-
-### 1. DATA_PATH not defined
-
-#### Error
-```python
-NameError: name 'DATA_PATH' is not defined
-```
-
-#### Fix
-```python
-DATA_PATH = "./"
-```
-
----
-
-### 2. Image not loading
-
-#### Error
-```python
-AttributeError: 'NoneType' object has no attribute 'copy'
-```
-
-#### Cause
-Incorrect image path.
-
-#### Fix
-Ensure the image exists at:
-
-```bash
-./images/CoinsA.png
-```
-
----
-
-### 3. NoneType object is not subscriptable
-
-#### Error
-```python
-TypeError: 'NoneType' object is not subscriptable
-```
-
-#### Cause
-`cv2.imread()` failed to load the image.
-
-#### Fix
-Check the image path and filename carefully.
-
----
-
-## 📈 Expected Output
-
-- Original image displayed successfully
-- Coins detected and visualized
-- Proper image preprocessing workflow
-
----
-
-## 🎯 Learning Outcomes
-
-By completing this project, you will learn:
-
-- Basics of OpenCV
-- Image handling in Python
-- Visualization using Matplotlib
-- Debugging image path issues
-- Introduction to Computer Vision concepts
-
----
-
-## 🚀 Future Improvements
-
-- Real-time coin detection using webcam
-- Coin classification by size
-- Currency recognition system
-- Deep Learning based object detection
-
----
-
-## 👨‍💻 Author
-
-Created as part of a Computer Vision / Image Processing assignment using Python and OpenCV.
-
----
-
-## 🌟 Star This Repository
-
-If you found this project useful, give it a ⭐ on GitHub!
+*Developed as a class activity for **Morphological Operators** and **Object Detection** in Computer Vision.*
